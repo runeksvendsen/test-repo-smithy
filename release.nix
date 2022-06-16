@@ -6,7 +6,7 @@ let
         sha256 = "0x5j9q1vi00c6kavnjlrwl3yy1xs60c34pkygm49dld2sgws7n0a";
       };
     in import src {};
-  lol = "pay no attention to this let-binding!";
+  lol = "pay no attention to this let-binding!!";
 in
 nixpkgs.stdenv.mkDerivation {
   name = "test-repo-smithy";
