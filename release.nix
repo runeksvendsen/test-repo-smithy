@@ -11,6 +11,7 @@ in
 nixpkgs.stdenv.mkDerivation {
   name = "test-repo-smithy";
   src = ./data;
+  system = "x86_64-darwin";
   installPhase = ''
     mkdir -p $out
     cp data.bin $out/
