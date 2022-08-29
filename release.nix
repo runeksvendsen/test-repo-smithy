@@ -6,6 +6,7 @@ let
         sha256 = "0x5j9q1vi00c6kavnjlrwl3yy1xs60c34pkygm49dld2sgws7n0a";
       };
     in import src {};
+  nixpkgsDiamond = import <nixpkgs> {};
   lol = "pay no attention to this let-binding!!1";
 in
 nixpkgs.stdenv.mkDerivation {
@@ -14,5 +15,6 @@ nixpkgs.stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     cp data.bin $out/
+    echo "${nixpkgsDiamond.stdenv.system}" > $out/system
   '';
 }
