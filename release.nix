@@ -6,7 +6,6 @@ in
 nixpkgs.stdenv.mkDerivation {
   name = "test-repo-smithy";
   src = ./data;
-  allowSubstitutes = false; # disable fetch from cache
   installPhase = ''
     mkdir -p $out
     cp data.bin $out/
