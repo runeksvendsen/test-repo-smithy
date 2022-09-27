@@ -7,7 +7,7 @@ let
       };
     in import src {};
   nixpkgsDiamond = import <nixpkgs> {};
-  lol = "pay no attention to this let-binding!!1";
+  lol = "pay no attention to this let-binding!!!1";
 in
 nixpkgs.stdenv.mkDerivation {
   name = "test-repo-smithy";
