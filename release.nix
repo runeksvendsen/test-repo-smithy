@@ -14,7 +14,7 @@ nixpkgs.stdenv.mkDerivation {
   src = ./data;
   installPhase = ''
     mkdir -p $out
-    cp data.bin $out/
+    cp data.txt $out/
     echo "${nixpkgsDiamond.stdenv.system}" > $out/system
   '';
 }
