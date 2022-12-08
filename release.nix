@@ -1,7 +1,5 @@
-# IFD example
-# Cf. https://nixos.wiki/wiki/Import_From_Derivation
 let
-  pkgs =
+  nixpkgs =
     let
       src = builtins.fetchTarball {
         url = "https://github.com/NixOS/nixpkgs/archive/30d3d79b7d3607d56546dd2a6b49e156ba0ec634.tar.gz";
@@ -9,19 +7,23 @@ let
       };
     in import src {};
 
-  # Create a derivation which, when built, writes some Nix code to
-  # its $out path.
-  derivation-to-import = pkgs.writeText "ifd" ''
-    pkgs: pkgs.stdenv.mkDerivation {
-      name = "test-repo-smithy-ifd";
-      src = pkgs.fetchurl {
-        url = "https://github.com/runeksvendsen/test-repo-smithy/archive/79fb1e22122775a5b4718e1919768d02333df252.tar.gz";
-        sha256 = "sha256:0yvmw2nd5apps7g8lpsxd0k6d7y8kyd9zvd4prwh5bfi8zxxn3r5";
-      };
-      installPhase = "mkdir -p $out ; cp data/data.txt $out/ ; echo 'ifd test' > $out/ifd.txt";
-    }
+  ifd1 = import ./ifd.nix { nonce = "1"; };
+  ifd2 = import ./ifd.nix { nonce = "2"; };
+  ifd3 = import ./ifd.nix { nonce = "3"; };
+in
+nixpkgs.stdenv.mkDerivation {
+  name = "trivial-ifd-2";
+  src = ./data;
+  buildInputs = [
+    ifd1
+    ifd2
+    ifd3
+  ];
+  installPhase = ''
+    mkdir -p $out
+    cp ${ifd1}/ifd.txt $out/ifd1.txt
+    cp ${ifd2}/ifd.txt $out/ifd2.txt
+    cp ${ifd3}/ifd.txt $out/ifd3.txt
   '';
+}
 
-  # Import this derivation.
-  imported-derivation = import derivation-to-import;
-in imported-derivation pkgs
