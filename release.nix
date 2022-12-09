@@ -7,8 +7,8 @@ let
       };
     in import src {};
 
-  ifd1 = import ./ifd.nix { nonce = "1"; };
-  ifd2 = import ./ifd.nix { nonce = "2"; };
+  ifd1 = import ./ifd.nix { nonce = "1"; buildInputs = [ ifd2 ]; };
+  ifd2 = import ./ifd.nix { nonce = "2"; buildInputs = [ ifd3 ]; };
   ifd3 = import ./ifd.nix { nonce = "3"; };
 in
 nixpkgs.stdenv.mkDerivation {
@@ -16,8 +16,6 @@ nixpkgs.stdenv.mkDerivation {
   src = ./data;
   buildInputs = [
     ifd1
-    ifd2
-    ifd3
   ];
   installPhase = ''
     mkdir -p $out

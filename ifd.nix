@@ -3,6 +3,7 @@
 { nonce # we want to make sure Nix actually builds the derivation,
         # instead of realizing from cache, which is achieved by
         # using different nonces for different derivations.
+, buildInputs ? []
 }:
 let
   pkgs =
@@ -17,6 +18,7 @@ let
   # its $out path.
   derivation-to-import = pkgs.writeText "ifd" ''
     pkgs: pkgs.stdenv.mkDerivation {
+      buildInputs = [ ${toString buildInputs} ];
       name = "test-repo-smithy-ifd";
       src = pkgs.fetchurl {
         url = "https://github.com/runeksvendsen/test-repo-smithy/archive/79fb1e22122775a5b4718e1919768d02333df252.tar.gz";
