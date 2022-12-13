@@ -8,20 +8,30 @@ let
     in import src {};
 
   ifd1 = import ./ifd.nix { nonce = "1"; buildInputs = [ ifd2 ]; };
-  ifd2 = import ./ifd.nix { nonce = "2"; buildInputs = [ ifd3 ]; };
-  ifd3 = import ./ifd.nix { nonce = "3"; };
+  ifd2 = import ./ifd.nix { nonce = "2"; buildInputs = [ ifd3 ifd6 ]; };
+  ifd3 = import ./ifd.nix { nonce = "3"; buildInputs = [ ifd6 ]; };
+
+  ifd4 = import ./ifd.nix { nonce = "4"; buildInputs = [ ifd2 ifd5 ]; };
+  ifd5 = import ./ifd.nix { nonce = "5"; buildInputs = [ ifd6 ]; };
+  ifd6 = import ./ifd.nix { nonce = "6"; buildInputs = [ ]; };
+
 in
 nixpkgs.stdenv.mkDerivation {
   name = "trivial-ifd-2";
   src = ./data;
   buildInputs = [
     ifd1
+    ifd4
+    ifd6
   ];
   installPhase = ''
     mkdir -p $out
     cp ${ifd1}/ifd.txt $out/ifd1.txt
     cp ${ifd2}/ifd.txt $out/ifd2.txt
     cp ${ifd3}/ifd.txt $out/ifd3.txt
+    cp ${ifd4}/ifd.txt $out/ifd4.txt
+    cp ${ifd5}/ifd.txt $out/ifd5.txt
+    cp ${ifd6}/ifd.txt $out/ifd6.txt
   '';
 }
 
